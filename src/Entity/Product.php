@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -27,9 +29,14 @@ class Product
     private $description;
 
     /**
-     * @ORM\Column(type="array")
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="product")
      */
     private $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -60,15 +67,20 @@ class Product
         return $this;
     }
 
-    public function getCategories(): ?array
+    public function getCategories(): ?Collection
     {
         return $this->categories;
     }
 
-    public function setCategories(array $categories): self
+    public function setCategories(ArrayCollection $categories): self
     {
         $this->categories = $categories;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 }
